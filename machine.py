@@ -8,8 +8,7 @@ address = os.environ['ADDRESS']
 url = os.environ['EURL']
 name = os.environ['WORKER']
 
-
-requestX = requests.get(url+address)
+requestX = requests.get(url)
 
 if requestX.status_code != 200:
     print (requestX.status_code)
@@ -18,9 +17,14 @@ if requestX.status_code != 200:
 jsonX = requestX.json()
 
 down = False
-if jsonX['workers'][name]['reportedHashRate'] == '0H/s':
+
+print (jsonX)
+if jsonX['data']['reportedHashrate'] == 0:
     down = True
 
 
+print (os.system('pgrep nm'))
+
 if down:
     print ('Machine is down, restart')
+    os.system('reboot')
